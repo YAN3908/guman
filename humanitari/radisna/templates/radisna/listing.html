@@ -1,0 +1,41 @@
+{% extends "radisna/layout.html" %}
+{% load static %}
+{% block body %}
+<main>
+    <div class="container" style="max-width: 800px;">
+        <h2>Шпалера</h2>
+        <ol style="text-align: left">
+            {% for user in users%}
+            <li style="background-color: green; margin: 20px 0px 20px 0px">{{user.last_name}} {{user.first_name}}
+                {{user.patronymic}}
+                <div class="tab">
+                    <nobr>{{user.date_birth|date:"d-m-Y"}}</nobr>
+                </div>
+                <div class="tab">(ІПН){{user.username}}</div>
+                <div class="tab">
+                    <nobr>{{user.street}}{{user.home}}.{{user.apartment}}</nobr>
+                </div>
+                {%if user.invalid%}
+                <div class="tab"><nobr>Инвалид№{{user.invalid}}</nobr></div>
+                {%endif%}
+                {%if user.many_children%}
+                <div class="tab"><nobr>БагатоД.№{{user.many_children}}</nobr></div>
+                {%endif%}
+                <div class="tab">тел:+38{{user.phone}}</div>
+<!--                {{user.helps.last.Check}}-->
+                <form action="{% url 'check' %}" method="post" >
+                    {% csrf_token %}
+                <input type="hidden" name="check" value="{{user.helps.last.id}}">
+
+                <input class="btn btn-primary" type="submit" value="отримав">
+                </form>
+            </li>
+
+            {%endfor%}
+        </ol>
+
+
+
+        <!--    </div>-->
+</main>
+{% endblock %}

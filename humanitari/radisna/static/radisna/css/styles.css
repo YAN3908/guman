@@ -11,6 +11,10 @@ header{
      background: url('image/auctionn.jpg') no-repeat center;
      background-size: cover;
 }
+div.tab{
+    display: inline;
+    margin-left: 10px;
+}
 
 
 table {

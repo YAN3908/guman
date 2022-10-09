@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Model
 from django.utils import timezone
 from datetime import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -17,14 +18,19 @@ class Streets(models.Model):
 class Helps(models.Model):
     help = models.DateTimeField(default=(datetime.now))
     Check = models.BooleanField()
-
+# def save(self, *args, **kwargs):
+#     if self.Check and self.help is None:
+#         self.help = timezone.now()
+#     elif not self.Check and self.help is not None:
+#         self.help = None
+#     super(Model, self).save(*args, **kwargs)
 
 class User(AbstractUser):
     # userLot = models.ForeignKey(Lot, on_delete=models.CASCADE, related_name="userLot")
     home = models.IntegerField()
     patronymic = models.CharField(max_length=24)
     apartment = models.IntegerField()
-    date_birth = models.DateTimeField()
+    # date_birth = models.DateTimeField()
     phone = models.CharField(max_length=10)
     invalid = models.CharField(max_length=20, blank=True)
     many_children = models.CharField(max_length=20, blank=True)

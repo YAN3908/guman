@@ -190,7 +190,8 @@ class IGree(forms.ModelForm):
 def index(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            return HttpResponse(request.user)
+            return render(request, "radisna/listing.html", {"users": User.objects.filter(helps__Check=True)})
+
         else:
             return HttpResponseRedirect(reverse("helpme"))
     else:
@@ -210,6 +211,8 @@ def logout_view(request):
 def helpme(request):
     if request.user.is_authenticated:
         user = User.objects.get(pk=int(request.user.id))
+        print(user)
+        print("qwertyuiop")
         if request.method == "POST":
             if request.POST['helpme']:
                 help = Helps(Check=True)
@@ -230,7 +233,27 @@ def helpme(request):
                     return render(request, "radisna/helpme.html",
                                   {"message1": f"Ви зареєстровані як {user.first_name} "
                                                f"{user.patronymic}, ми вже готуємо вашу допомогу, чекайте будь ласка."})
+                else:
+                    return render(request, "radisna/helpme.html",
+                              {"message": f"Ви зареєстровані як {user.first_name} "
+                                           f"{user.patronymic}, зробіть наступну заявку ."})
             else:
                 return render(request, "radisna/helpme.html",
                               {"message": f"Ви зареєстровані як {user.first_name} {user.patronymic} "
                                           f"зробіть заявку на допомогу натиснувши кнопку нижче"})
+
+
+def check(request):
+    if request.method == "POST":
+        if request.POST['check']:
+            print(request.POST['check'])
+            check = Helps.objects.get(pk=int(request.POST['check']))
+            print(check)
+            check.Check = False
+            check.help = datetime.now()
+            check.save()
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return HttpResponseRedirect(reverse("index"))
+    else:
+        return HttpResponseRedirect(reverse("index"))
