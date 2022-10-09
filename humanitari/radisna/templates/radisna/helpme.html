@@ -1,0 +1,21 @@
+{% extends "radisna/layout.html" %}
+{% load static %}
+{% block body %}
+<main>
+    <div class="container" style="max-width: 800px;">
+<a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+        {% if message1 %}
+            <div>{{ message1 }}</div>
+        {% else %}
+        <div>{{ message }}</div>
+                <form action="{% url 'helpme' %}" method="post">
+            {% csrf_token %}
+        <input type="hidden" name="helpme" value="helpme">
+
+        <input class="btn btn-primary" type="submit" value="help me">
+        </form>
+
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

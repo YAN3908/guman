@@ -7,7 +7,7 @@
         {% endif %}
     <div class="container" style="max-width: 800px;">
 <!--        <h2>Greate a lot</h2>-->
-        <form action="{% url 'index' %}" method="post" >
+        <form action="{% url 'register' %}" method="post" >
         {% csrf_token %}
         {% for field in form  %}
 

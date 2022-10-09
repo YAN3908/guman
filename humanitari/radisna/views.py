@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.forms import DateInput, TextInput, EmailInput  # mast hewe
+from django.forms import DateInput, TextInput, EmailInput, Select  # mast hewe
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.db import IntegrityError
 
-from .models import User
+from .models import User, Streets, Helps
 
 
 class DateInput(forms.DateInput):
@@ -27,8 +27,9 @@ class RForm(forms.ModelForm):
         model = User
         # fields = "__all__"
         fields = (
-            'username', 'password', 'first_name', 'last_name', 'patronymic', 'home', 'apartment', 'date_birth',
-            'invalid', 'many_children', 'email',)
+            'username', 'password', 'first_name', 'last_name', 'patronymic', 'street', 'home', 'apartment',
+            'date_birth',
+            'invalid', 'many_children', 'email')
         datelimit = datetime.now() - timedelta(days=5111)
         widgets = {
             'date_birth': DateInput(
@@ -39,6 +40,7 @@ class RForm(forms.ModelForm):
             'first_name': TextInput(attrs={'class': 'form-control', 'required': 'true'}),
             'last_name': TextInput(attrs={'class': 'form-control', 'required': 'true'}),
             'patronymic': TextInput(attrs={'class': 'form-control'}),
+            'street': Select(attrs={'class': 'form-control'}),
             'home': NumberInput(attrs={'class': 'form-control'}),
             'apartment': NumberInput(attrs={'class': 'form-control'}),
             'invalid': TextInput(attrs={'class': 'form-control'}),
@@ -56,7 +58,8 @@ class RForm(forms.ModelForm):
             'patronymic': ('По-батькові'),
             'home': ('№ дому'),
             'apartment': ('Квартира'),
-            'date_birth': ('Дата народження')
+            'date_birth': ('Дата народження'),
+            'street': ('Вулиця')
         }
 
         # def clean(self):
@@ -70,7 +73,7 @@ class RForm(forms.ModelForm):
         #             raise ValidationError("Title is too short")
 
 
-def index(request):
+def register(request):
     # return HttpResponse(request.user)
 
     if request.method == "POST":
@@ -87,9 +90,10 @@ def index(request):
         date_birth = request.POST["date_birth"]
         invalid = request.POST["invalid"]
         many_children = request.POST["many_children"]
+        street = request.POST['street']
         if len(username) != 10:
             return render(request, "radisna/register.html", {'form': form,
-                                                          "message": "Не вірний РОНКПП"})
+                                                             "message": "Не вірний РОНКПП"})
         if all([password[:3] != "039",
                 password[:3] != "051",
                 password[:3] != "050",
@@ -109,48 +113,124 @@ def index(request):
                 password[:3] != "099",
                 ]):
             return render(request, "radisna/register.html", {'form': form,
-                                                          "message": "Не вірний номер телефону"
-                                                          })
+                                                             "message": "Не вірний номер телефону"
+                                                             })
         if len(password) != 10:
             return render(request, "radisna/register.html", {'form': form,
-                                                          "message": "Не вірний номер телефону"
-                                                          })
+                                                             "message": "Не вірний номер телефону"
+                                                             })
 
         if not first_name.isalpha():
             return render(request, "radisna/register.html", {'form': form,
-                                                          "message": "У вашому імені не повино бути цифр"
-                                                          })
+                                                             "message": "У вашому імені не повино бути цифр"
+                                                             })
         if not last_name.isalpha():
             return render(request, "radisna/register.html", {'form': form,
-                                                          "message": "У вашому прізвищі не повино бути цифр"
-                                                          })
+                                                             "message": "У вашому прізвищі не повино бути цифр"
+                                                             })
         if not patronymic.isalpha():
             return render(request, "radisna/register.html", {'form': form,
-                                                          "message": "По-батькові не може містити цифр"
-                                                          })
+                                                             "message": "По-батькові не може містити цифр"
+                                                             })
 
         datelimit = datetime.now() - timedelta(days=21914)
         if not invalid and not many_children:
             if date_birth > datelimit.strftime("%Y-%m-%d"):
                 return render(request, "radisna/register.html", {'form': form,
-                                                              "message": "Ваш вік повинен бути не меньшим за 60 років"
-                                                              })
-        # print(email)
+                                                                 "message": "Ваш вік повинен бути не меньшим за 60 років"
+                                                                 })
+        print(username)
         # Attempt to create new user
         # print(date_birth)
+
         try:
             user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name,
                                             home=home,
                                             apartment=apartment, date_birth=date_birth, patronymic=patronymic,
-                                            phone=password, invalid=invalid, many_children=many_children)
+                                            phone=password, invalid=invalid, many_children=many_children,
+                                            street=Streets.objects.get(pk=street), )
             user.save()
         except IntegrityError:
             return render(request, "radisna/register.html", {'form': form,
-                                                          "message": "Цей громадянин вже зареестрований"
-                                                          })
+                                                             "message": "Цей громадянин вже зареестрований"
+
+                                                             })
         login(request, user)
         # return HttpResponseRedirect(reverse("index"))
-        return HttpResponse(request.user)
+        return HttpResponseRedirect(reverse("helpme"))
 
     else:
         return render(request, "radisna/register.html", {'form': RForm})
+
+
+def login_view(request):  # not used
+    if request.method == "POST":
+
+        # Attempt to sign user in
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "radisna/login.html", {
+                "message": "Invalid username and/or password."
+            })
+    else:
+        return render(request, "radisna/login.html")
+
+
+class IGree(forms.ModelForm):
+    i_gree = forms.BooleanField()
+
+
+def index(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return HttpResponse(request.user)
+        else:
+            return HttpResponseRedirect(reverse("helpme"))
+    else:
+        if request.method == "POST":
+            if request.POST["I_gree"]:
+                return HttpResponseRedirect(reverse("register"))
+        else:
+            return render(request, "radisna/index.html")
+        # return HttpResponseRedirect(reverse("register"))
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
+
+def helpme(request):
+    if request.user.is_authenticated:
+        user = User.objects.get(pk=int(request.user.id))
+        if request.method == "POST":
+            if request.POST['helpme']:
+                help = Helps(Check=True)
+                help.save()
+                user.helps.add(help)
+                # lot.starting_price = form.cleaned_data["starting_price"]
+                # lot.save()
+                return HttpResponseRedirect(reverse("helpme"))
+            else:
+                return render(request, "radisna/helpme.html")
+
+        else:
+            print(request.user.id)
+            # user = User.objects.get(pk=int(request.user.id))
+            # print(user.helps.all().last().Check)
+            if user.helps.all():
+                if user.helps.all().last().Check == True:
+                    return render(request, "radisna/helpme.html",
+                                  {"message1": f"Ви зареєстровані як {user.first_name} "
+                                               f"{user.patronymic}, ми вже готуємо вашу допомогу, чекайте будь ласка."})
+            else:
+                return render(request, "radisna/helpme.html",
+                              {"message": f"Ви зареєстровані як {user.first_name} {user.patronymic} "
+                                          f"зробіть заявку на допомогу натиснувши кнопку нижче"})

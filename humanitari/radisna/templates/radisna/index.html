@@ -1,0 +1,34 @@
+{% extends "radisna/layout.html" %}
+{% load static %}
+{% block body %}
+<main>
+    <div class="container" style="max-width: 800px;">
+        <h2>Greate a lot</h2>
+<a class="nav-link" href="{% url 'login' %}">Вже реєструвалися, авторізуйтесь</a>
+        <form action="{% url 'index' %}" method="post" >
+            {% csrf_token %}
+        <input type="hidden" name="I_gree" value="I gree">
+
+        <input class="btn btn-primary" type="submit" value="зареєструватися">
+        </form>
+
+<!--        <form action="{% url 'index' %}" method="post" >-->
+<!--        {% csrf_token %}-->
+<!--        {% for field in form  %}-->
+
+<!--            {%if field.name == "email" or  field.name == "invalid" or  field.name == "many_children" %}-->
+<!--           {{field.label_tag}}-->
+<!--            {%else%}-->
+<!--            {{field.label_tag}}<span style="color:red;">*</span>-->
+<!--            {%endif%}-->
+<!--            <div class="form-group">{{field}}</div>-->
+
+
+<!--           {% endfor %}-->
+
+
+<!--        <input class="btn btn-primary" type="submit" value="зареєструватися">-->
+<!--        </form>-->
+    </div>
+</main>
+{% endblock %}
