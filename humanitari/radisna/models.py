@@ -29,8 +29,8 @@ class User(AbstractUser):
     invalid = models.CharField(max_length=20, blank=True)
     many_children = models.CharField(max_length=20, blank=True)
     street = models.ForeignKey(Streets, on_delete=models.CASCADE, related_name="user_street")
-    helps = models.ManyToManyField(Helps, blank=True, related_name="helpmy")
-    # date_birth = models.DateField(null=True, blank=True)
+    # helps = models.ManyToManyField(Helps, blank=True, related_name="helpmy")
+    date_birth = models.DateField(null=True, blank=True)
     # def clean(self, *args, **kwargs):
     #     # run the base validation
     #     super(User, self).clean(*args, **kwargs)
