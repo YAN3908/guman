@@ -3,7 +3,7 @@
 {% block body %}
 <main>
     <div class="container" style="max-width: 800px;">
-        <h2>Шпалера</h2>
+        <h2>Шпалера</h2> <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
          {%if not users %}
             <h5>Ще ніхто не заявив про допомогу</h5>
         {%else%}
