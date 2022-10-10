@@ -12,9 +12,9 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('auth', '0023_alter_user_username'),
-    ]
+    # dependencies = [
+    #     ('auth', '0023_alter_user_username'),
+    # ]
 
     operations = [
         migrations.CreateModel(
