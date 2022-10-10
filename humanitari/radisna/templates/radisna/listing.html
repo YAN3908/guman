@@ -4,9 +4,12 @@
 <main>
     <div class="container" style="max-width: 800px;">
         <h2>Шпалера</h2>
+         {%if not users %}
+            <h5>Ще ніхто не заявив про допомогу</h5>
+        {%else%}
         <ol style="text-align: left">
             {% for user in users%}
-            <li style="background-color: green; margin: 20px 0px 20px 0px">{{user.last_name}} {{user.first_name}}
+            <li style="background-color: rgba(192,192,192,0.3); margin: 20px 0px 20px 0px">{{user.last_name}} {{user.first_name}}
                 {{user.patronymic}}
                 <div class="tab">
                     <nobr>{{user.date_birth|date:"d-m-Y"}}</nobr>
@@ -33,7 +36,7 @@
 
             {%endfor%}
         </ol>
-
+ {%endif%}
 
 
         <!--    </div>-->

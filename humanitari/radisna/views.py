@@ -27,7 +27,7 @@ class RForm(forms.ModelForm):
         model = User
         # fields = "__all__"
         fields = (
-            'username', 'password', 'first_name', 'last_name', 'patronymic', 'street', 'home', 'apartment',
+            'username', 'password', 'last_name', 'first_name', 'patronymic', 'street', 'home', 'apartment',
             'date_birth',
             'invalid', 'many_children', 'email')
         datelimit = datetime.now() - timedelta(days=5111)
