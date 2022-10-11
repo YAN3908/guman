@@ -27,7 +27,8 @@ class RForm(forms.ModelForm):
         model = User
         # fields = "__all__"
         fields = (
-            'username', 'password', 'last_name', 'first_name', 'patronymic', 'street', 'home', 'home_index', 'apartment', 'apartment_index',
+            'username', 'password', 'last_name', 'first_name', 'patronymic', 'street', 'home', 'home_index',
+            'apartment', 'apartment_index',
             'date_birth', 'pension',
             'invalid', 'many_children', 'email')
         datelimit = datetime.now() - timedelta(days=5111)
@@ -90,7 +91,11 @@ def register(request):
         last_name = request.POST["last_name"]
         patronymic = request.POST["patronymic"]
         home = request.POST["home"]
+        home_index=request.POST["home_index"]
         apartment = request.POST["apartment"]
+        if apartment == '':
+            apartment = 0
+        apartment_index = request.POST["apartment_index"]
         date_birth = request.POST["date_birth"]
         invalid = request.POST["invalid"]
         many_children = request.POST["many_children"]
@@ -154,9 +159,9 @@ def register(request):
 
         try:
             user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name,
-                                            home=home,
-                                            apartment=apartment, date_birth=date_birth, patronymic=patronymic,
-                                            phone=password, invalid=invalid, many_children=many_children,
+                                            home=home, home_index=home_index,
+                                            apartment=apartment, apartment_index=apartment_index, date_birth=date_birth, patronymic=patronymic,
+                                            phone=password, pension=pension, invalid=invalid, many_children=many_children,
                                             street=Streets.objects.get(pk=street), )
             user.save()
         except IntegrityError:
@@ -244,8 +249,8 @@ def helpme(request):
                                                f"{user.patronymic}, ми вже готуємо вашу допомогу, чекайте будь ласка."})
                 else:
                     return render(request, "radisna/helpme.html",
-                              {"message": f"Ви зареєстровані як {user.first_name} "
-                                           f"{user.patronymic}, зробіть наступну заявку ."})
+                                  {"message": f"Ви зареєстровані як {user.first_name} "
+                                              f"{user.patronymic}, зробіть наступну заявку ."})
             else:
                 return render(request, "radisna/helpme.html",
                               {"message": f"Ви зареєстровані як {user.first_name} {user.patronymic} "

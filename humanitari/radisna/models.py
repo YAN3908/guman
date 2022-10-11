@@ -31,7 +31,7 @@ class User(AbstractUser):
     # userLot = models.ForeignKey(Lot, on_delete=models.CASCADE, related_name="userLot")
     home = models.PositiveIntegerField()
     patronymic = models.CharField(max_length=24)
-    apartment = models.PositiveIntegerField()
+    apartment = models.PositiveIntegerField(blank=True, null=True,)
     # date_birth = models.DateTimeField()
     phone = models.CharField(max_length=10)
     invalid = models.CharField(max_length=20, blank=True)
@@ -44,7 +44,10 @@ class User(AbstractUser):
                                   choices=[('а', "а"), ('б', "б"), ('в', "в"), ('г', "г")])
     apartment_index = models.CharField(max_length=1, blank=True, null=True,
                                        choices=[('а', "а"), ('б', "б"), ('в', "в"), ('г', "г")])
-    # def clean(self, *args, **kwargs):
+
+    # def clean(self):
+    #     if self.apartment is None:
+    #         self.apartment = 0        # def clean(self, *args, **kwargs):
     #     # run the base validation
     #     super(User, self).clean(*args, **kwargs)
     #

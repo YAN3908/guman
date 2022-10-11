@@ -16,8 +16,12 @@
                 </div>
                 <div class="tab">(ІПН){{user.username}}</div>
                 <div class="tab">
-                    <nobr>{{user.street}}{{user.home}}.{{user.apartment}}</nobr>
+                    <nobr>{{user.street}}{{user.home}}{%if user.home_index%}{{user.home_index}}{%endif%}
+                        {%if user.apartment != 0 %}кв.{{user.apartment}}{%endif%}{%if user.apartment_index%}{{user.apartment_index}}{%endif%}</nobr>
                 </div>
+                {%if user.pension%}
+                <div class="tab"><nobr>пенс№{{user.pension}}</nobr></div>
+                {%endif%}
                 {%if user.invalid%}
                 <div class="tab"><nobr>Инвалид№{{user.invalid}}</nobr></div>
                 {%endif%}
