@@ -29,9 +29,9 @@ class Helps(models.Model):
 
 class User(AbstractUser):
     # userLot = models.ForeignKey(Lot, on_delete=models.CASCADE, related_name="userLot")
-    home = models.IntegerField()
+    home = models.PositiveIntegerField()
     patronymic = models.CharField(max_length=24)
-    apartment = models.IntegerField()
+    apartment = models.PositiveIntegerField()
     # date_birth = models.DateTimeField()
     phone = models.CharField(max_length=10)
     invalid = models.CharField(max_length=20, blank=True)
