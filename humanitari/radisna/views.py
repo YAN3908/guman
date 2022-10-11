@@ -28,7 +28,7 @@ class RForm(forms.ModelForm):
         # fields = "__all__"
         fields = (
             'username', 'password', 'last_name', 'first_name', 'patronymic', 'street', 'home', 'apartment',
-            'date_birth',
+            'date_birth', 'pension',
             'invalid', 'many_children', 'email')
         datelimit = datetime.now() - timedelta(days=5111)
         widgets = {
@@ -44,6 +44,7 @@ class RForm(forms.ModelForm):
             'home': NumberInput(attrs={'class': 'form-control'}),
             'apartment': NumberInput(attrs={'class': 'form-control'}),
             'invalid': TextInput(attrs={'class': 'form-control'}),
+            'pension': TextInput(attrs={'class': 'form-control'}),
             'many_children': TextInput(attrs={'class': 'form-control'}),
             'email': EmailInput(attrs={'class': 'form-control'}),
         }
@@ -59,7 +60,8 @@ class RForm(forms.ModelForm):
             'home': ('№ дому'),
             'apartment': ('Квартира'),
             'date_birth': ('Дата народження'),
-            'street': ('Вулиця')
+            'street': ('Вулиця'),
+            'pension': ('пенсійне')
         }
 
         # def clean(self):
@@ -91,6 +93,7 @@ def register(request):
         invalid = request.POST["invalid"]
         many_children = request.POST["many_children"]
         street = request.POST['street']
+        pension = request.POST['pension']
         if len(username) != 10:
             return render(request, "radisna/register.html", {'form': form,
                                                              "message": "Не вірний РОНКПП"})
@@ -131,6 +134,10 @@ def register(request):
         if not patronymic.isalpha():
             return render(request, "radisna/register.html", {'form': form,
                                                              "message": "По-батькові не може містити цифр"
+                                                             })
+        if not invalid and not many_children and not pension:
+            return render(request, "radisna/register.html", {'form': form,
+                                                             "message": "Ви повині ввести хочаб один льготний документ"
                                                              })
 
         datelimit = datetime.now() - timedelta(days=21914)
