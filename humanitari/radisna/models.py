@@ -40,7 +40,10 @@ class User(AbstractUser):
     street = models.ForeignKey(Streets, on_delete=models.CASCADE, related_name="user_street")
     helps = models.ManyToManyField(Helps, blank=True, related_name="helpmy")
     date_birth = models.DateField(null=True, blank=True)
-
+    home_index = models.CharField(max_length=1, blank=True, null=True,
+                                  choices=[('а', "а"), ('б', "б"), ('в', "в"), ('г', "г")])
+    apartment_index = models.CharField(max_length=1, blank=True, null=True,
+                                       choices=[('а', "а"), ('б', "б"), ('в', "в"), ('г', "г")])
     # def clean(self, *args, **kwargs):
     #     # run the base validation
     #     super(User, self).clean(*args, **kwargs)

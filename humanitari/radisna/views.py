@@ -27,7 +27,7 @@ class RForm(forms.ModelForm):
         model = User
         # fields = "__all__"
         fields = (
-            'username', 'password', 'last_name', 'first_name', 'patronymic', 'street', 'home', 'apartment',
+            'username', 'password', 'last_name', 'first_name', 'patronymic', 'street', 'home', 'home_index', 'apartment', 'apartment_index',
             'date_birth', 'pension',
             'invalid', 'many_children', 'email')
         datelimit = datetime.now() - timedelta(days=5111)
@@ -47,6 +47,8 @@ class RForm(forms.ModelForm):
             'pension': TextInput(attrs={'class': 'form-control'}),
             'many_children': TextInput(attrs={'class': 'form-control'}),
             'email': EmailInput(attrs={'class': 'form-control'}),
+            'home_index': Select(attrs={'class': 'form-control'}),
+            'apartment_index': Select(attrs={'class': 'form-control'})
         }
         # widgets = {
         #     'password': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -54,8 +56,8 @@ class RForm(forms.ModelForm):
         labels = {
             'username': ('РНОКПП'),
             'password': ('№ телефону'),
-            'invalid': ('№ посвідчення інваліда'),
-            'many_children': ('№ посвідчення багатодітної особи'),
+            'invalid': ('№ посв. інваліда'),
+            'many_children': ('№ посв. багатодітної особи'),
             'patronymic': ('По-батькові'),
             'home': ('№ дому'),
             'apartment': ('Квартира'),
