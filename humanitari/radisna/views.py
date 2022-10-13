@@ -24,10 +24,11 @@ def pdf(request):
     date=datetime.now()
     html_string = render_to_string("radisna/pdf.html", {"content": User.objects.filter(helps__Check=True), 'date': date})
     html = HTML(string=html_string)
+    # @page {size: A4 landscape; margin: 5mm 0 5mm 0}
     css = [
         CSS(
             string="""
-                        @page {size: A4 ; margin: 5mm 0 5mm 0}
+                        @page {size: A4; margin: 0 0 0 0}
                         # table{border-collapse: collapse }
                         #  td, th { border : 1px solid #C2C9D1; margin :0; padding:5px }
                          """
@@ -35,13 +36,16 @@ def pdf(request):
     ]
     # margin: 0mm 0mm; padding: 0mm 0mm;
     buffer = io.BytesIO()
-    html.write_pdf(target=buffer,  stylesheets=css, presentational_hints=True)
+    html.write_pdf(target=buffer, stylesheets=css, presentational_hints=True)
     # html.write_pdf(target="target.pdf", stylesheets=css, presentational_hints=True)
     # return FileResponse(html.write_pdf(target=None,  stylesheets=css, presentational_hints=True))
     # return render(request, (html.write_pdf(target=None,  stylesheets=css, presentational_hints=True)))
     # return render(request)
     buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename=f'radisna{date}.pdf')
+    # просмотр pdf
+    return FileResponse(buffer, as_attachment=False, filename=f'radisna{date}.pdf')
+    # скачивание pdf
+    # return FileResponse(buffer, as_attachment=True, filename=f'radisna{date}.pdf')
 
 
 

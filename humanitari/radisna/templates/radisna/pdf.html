@@ -102,7 +102,9 @@
             padding: 5px;
         }
         .name_title{
-            width: 60px;
+            border-left: 1px solid #C2C9D1;
+            width: 190px;
+            text-align: center;
         }
         athlete_city athlete_city_text{
         font-style: normal;
@@ -125,20 +127,39 @@
             width: 30px;
             text-align: center;
         }
-        .athlete_city{
-            width: 115px;
+        .category{
+            width: 30px;
+            border-left: 1px solid #C2C9D1;
+            text-align: center;
         }
         .status_title {
+            width: 80px;
+            border-left: 1px solid #C2C9D1;
             text-align: center;
         }
         .athlete_phone{
             padding: 0;
-            width: 110px;
+            width: 80px;
             text-align: center;
+            border-left: 1px solid #C2C9D1;
         }
         .date_birth{
-            width: 80px;
+            width: 45px;
+            border-left: 1px solid #C2C9D1;
+            text-align: center;
         }
+        .address{
+            width: 110px;
+            text-align: center;
+            border-left: 1px solid #C2C9D1;
+        }
+        .signature{
+            border-left: 1px solid #C2C9D1;
+            width: 87px;
+            text-align: center;
+        }
+
+
   </style>
 </head>
 
@@ -152,33 +173,40 @@
 <!--    </div>-->
     <br>
 <!--    <p class="date_create date_create_high">Дата формування: {{ content.date_create }} </p>-->
-<p class="date_create">Дата формування: {{ date }} </p>
+<p class="date_create" style="display: inline-block">{{ date|date:"d-m-Y H:i"}}</p> <h3 style="display: inline-block;"> Гуманітарна допомога вул. Радісна</h3>
     <div id="table_div">
     <table>
         <tr>
             <th class="athlete_n">№</th>
-            <th class="name_title">First Name</th>
-            <th class="name_title">Last Name</th>
-            <th>Gender</th>
-            <th class="date_birth">Date of birth</th>
-            <th class="athlete_phone">Phone</th>
-            <th class="athlete_city city_title">City</th>
-            <th>Registration date</th>
-            <th class="status_title">Status</th>
+            <th class="name_title">ПІБ</th>
+
+            <th class="address">адреса</th>
+            <th class="date_birth">дата нар-ня</th>
+            <th class="athlete_phone" style="border-left: 1px solid #C2C9D1;">Телефон</th>
+            <th class="category">кат</th>
+            <th class="status_title">ИПН / льготн</th>
+            <th class="signature">Підпис</th>
 
         </tr>
         {% for athlete in content%}
                 <tr  class="tr_table">
                     <td class="athlete_n">{{ forloop.counter }}.</td>
-                    <td>{{ athlete.first_name }}</td>
-                    <td>{{ athlete.last_name }}</td>
-                    <td>{{ athlete.username }}</td>
-                    <td>{{ athlete.date_birth|date:"d-m-Y" }}</td>
-            {#        <td id="athlete_phone">{{ athlete.phone}}</td>#}
+                    <td class="name_title">{{ athlete.last_name }} {{ athlete.first_name }} {{ athlete.patronymic }}р</td>
+                    <td class="address" >{{ athlete.street }} <nobr>{{athlete.home}}{%if athlete.home_index%}{{athlete.home_index}}{%endif%}
+                        {%if athlete.apartment != 0 %}кв.{{athlete.apartment}}{%endif%}{%if athlete.apartment_index%}{{athlete.apartment_index}}{%endif%}</nobr></td>
+                    <td class="date_birth">{{ athlete.date_birth|date:"d-m"}} {{ athlete.date_birth|date:"Y"}}</td>
                     <td class="athlete_phone">{{ athlete.phone}}</td>
-                    <td class="athlete_city athlete_city_text">{{ athlete.pension}}</td>
-                    <td>{{ athlete.date_registered}}</td>
-                    <td>{{ athlete.status}}</td>
+                    <td class="category">
+                        {% if athlete.invalid %}
+                        инв.
+                        {% elif athlete.many_children%}
+                        Б/д
+                        {%else%}
+                        60+
+                        {%endif%}
+                    </td>
+                    <td class="status_title">{{ athlete.username}} {{ athlete.pension}} {{ athlete.many_children}}</td>
+                    <td class="signature"></td>
                 </tr>
         {% endfor %}
     </table>
