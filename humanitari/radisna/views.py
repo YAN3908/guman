@@ -2,8 +2,9 @@
 import io
 from datetime import datetime, timedelta
 
-from _cffi_backend import buffer #####################
+
 from django import forms
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ValidationError
 from django.forms import DateInput, TextInput, EmailInput, Select  # mast hewe
 from django.shortcuts import render
@@ -11,18 +12,21 @@ from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 # Create your views here.
 from django.contrib.auth import authenticate, login, logout
 
-from django.template.loader import render_to_string    ################
+from django.template.loader import render_to_string  ################
 
 from django.urls import reverse
 from django.db import IntegrityError
 
 from .models import User, Streets, Helps
-from weasyprint import HTML,CSS
+from weasyprint import HTML, CSS
 
 
+@login_required
+@permission_required('is_superuser')
 def pdf(request):
-    date=datetime.now()
-    html_string = render_to_string("radisna/pdf.html", {"content": User.objects.filter(helps__Check=True), 'date': date})
+    date = datetime.now()
+    html_string = render_to_string("radisna/pdf.html",
+                                   {"content": User.objects.filter(helps__Check=True), 'date': date})
     html = HTML(string=html_string)
     # @page {size: A4 landscape; margin: 5mm 0 5mm 0}
     css = [
@@ -46,7 +50,6 @@ def pdf(request):
     return FileResponse(buffer, as_attachment=False, filename=f'radisna{date}.pdf')
     # скачивание pdf
     # return FileResponse(buffer, as_attachment=True, filename=f'radisna{date}.pdf')
-
 
 
 class DateInput(forms.DateInput):
@@ -92,15 +95,16 @@ class RForm(forms.ModelForm):
         labels = {
             'username': ('РНОКПП'),
             'password': ('№ телефону'),
-            'invalid': ('№ посв. інваліда'),
-            'many_children': ('№ посв. багатодітної особи'),
+            'invalid': ('Сер.№ посв. інваліда'),
+            'many_children': ('Сер.№ посв. багатодітної особи'),
             'patronymic': ('По-батькові'),
             'home': ('№ дому'),
             'apartment': ('Квартира'),
             'date_birth': ('Дата народження'),
             'street': ('Вулиця'),
-            'pension': ('пенсійне')
+            'pension': ('Сер.№ пенсійного')
         }
+        # unique_together = ('street', 'home', 'home_index', 'apartment_index')
 
         # def clean(self):
         #     cleaned_data = super(RForm, self).clean()
@@ -187,7 +191,7 @@ def register(request):
                 return render(request, "radisna/register.html", {'form': form,
                                                                  "message": "Ваш вік повинен бути не меньшим за 60 років"
                                                                  })
-        print(username)
+        # print(username)
         # Attempt to create new user
         # print(date_birth)
 
@@ -202,7 +206,7 @@ def register(request):
             user.save()
         except IntegrityError:
             return render(request, "radisna/register.html", {'form': form,
-                                                             "message": "Цей громадянин вже зареестрований"
+                                                             "message": "Ви або хтось з вашої родини вже зареєстрований"
 
                                                              })
         login(request, user)

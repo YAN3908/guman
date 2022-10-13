@@ -29,21 +29,24 @@ class Helps(models.Model):
 
 class User(AbstractUser):
     # userLot = models.ForeignKey(Lot, on_delete=models.CASCADE, related_name="userLot")
-    home = models.PositiveIntegerField(null=True,)
+    home = models.PositiveIntegerField(null=True, )
     patronymic = models.CharField(max_length=24)
-    apartment = models.PositiveIntegerField(blank=True, null=True,)
+    apartment = models.PositiveIntegerField(blank=True, null=True, )
     # date_birth = models.DateTimeField()
     phone = models.CharField(max_length=10)
     invalid = models.CharField(max_length=20, blank=True)
     pension = models.CharField(max_length=30, blank=True)
     many_children = models.CharField(max_length=20, blank=True)
-    street = models.ForeignKey(Streets, on_delete=models.CASCADE, related_name="user_street", null=True,)
+    street = models.ForeignKey(Streets, on_delete=models.CASCADE, related_name="user_street", null=True, )
     helps = models.ManyToManyField(Helps, blank=True, related_name="helpmy")
     date_birth = models.DateField(null=True, blank=True)
     home_index = models.CharField(max_length=1, blank=True, null=True,
                                   choices=[('а', "а"), ('б', "б"), ('в', "в"), ('г', "г")])
     apartment_index = models.CharField(max_length=1, blank=True, null=True,
                                        choices=[('а', "а"), ('б', "б"), ('в', "в"), ('г', "г")])
+
+    class Meta:
+        unique_together = ('street', 'home', 'home_index', 'apartment', 'apartment_index',)
 
     # def clean(self):
     #     if self.apartment is None:
