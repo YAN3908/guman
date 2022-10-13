@@ -21,7 +21,8 @@ from weasyprint import HTML,CSS
 
 
 def pdf(request):
-    html_string = render_to_string("radisna/pdf.html", {"content": User.objects.filter(helps__Check=True)})
+    date=datetime.now()
+    html_string = render_to_string("radisna/pdf.html", {"content": User.objects.filter(helps__Check=True), 'date': date})
     html = HTML(string=html_string)
     css = [
         CSS(
@@ -40,7 +41,7 @@ def pdf(request):
     # return render(request, (html.write_pdf(target=None,  stylesheets=css, presentational_hints=True)))
     # return render(request)
     buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename='qwqe.pdf')
+    return FileResponse(buffer, as_attachment=True, filename=f'radisna{date}.pdf')
 
 
 
