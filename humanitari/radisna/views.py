@@ -1,17 +1,47 @@
 # import datetime
+import io
 from datetime import datetime, timedelta
 
+from _cffi_backend import buffer #####################
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import DateInput, TextInput, EmailInput, Select  # mast hewe
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 # Create your views here.
 from django.contrib.auth import authenticate, login, logout
+
+from django.template.loader import render_to_string    ################
+
 from django.urls import reverse
 from django.db import IntegrityError
 
 from .models import User, Streets, Helps
+from weasyprint import HTML,CSS
+
+
+def pdf(request):
+    html_string = render_to_string("radisna/pdf.html", {"content": User.objects.filter(helps__Check=True)})
+    html = HTML(string=html_string)
+    css = [
+        CSS(
+            string="""
+                        @page {size: A4 ; margin: 5mm 0 5mm 0}
+                        # table{border-collapse: collapse }
+                        #  td, th { border : 1px solid #C2C9D1; margin :0; padding:5px }
+                         """
+        )
+    ]
+    # margin: 0mm 0mm; padding: 0mm 0mm;
+    buffer = io.BytesIO()
+    html.write_pdf(target=buffer,  stylesheets=css, presentational_hints=True)
+    # html.write_pdf(target="target.pdf", stylesheets=css, presentational_hints=True)
+    # return FileResponse(html.write_pdf(target=None,  stylesheets=css, presentational_hints=True))
+    # return render(request, (html.write_pdf(target=None,  stylesheets=css, presentational_hints=True)))
+    # return render(request)
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='qwqe.pdf')
+
 
 
 class DateInput(forms.DateInput):
@@ -80,7 +110,6 @@ class RForm(forms.ModelForm):
 
 def register(request):
     # return HttpResponse(request.user)
-
     if request.method == "POST":
         form = RForm(request.POST)
 
@@ -91,7 +120,7 @@ def register(request):
         last_name = request.POST["last_name"]
         patronymic = request.POST["patronymic"]
         home = request.POST["home"]
-        home_index=request.POST["home_index"]
+        home_index = request.POST["home_index"]
         apartment = request.POST["apartment"]
         if apartment == '':
             apartment = 0
@@ -160,8 +189,10 @@ def register(request):
         try:
             user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name,
                                             home=home, home_index=home_index,
-                                            apartment=apartment, apartment_index=apartment_index, date_birth=date_birth, patronymic=patronymic,
-                                            phone=password, pension=pension, invalid=invalid, many_children=many_children,
+                                            apartment=apartment, apartment_index=apartment_index, date_birth=date_birth,
+                                            patronymic=patronymic,
+                                            phone=password, pension=pension, invalid=invalid,
+                                            many_children=many_children,
                                             street=Streets.objects.get(pk=street), )
             user.save()
         except IntegrityError:

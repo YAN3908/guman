@@ -1,0 +1,188 @@
+{% load static %}
+<html>
+<head>
+  <title>{{ content.event }}</title>
+  <style>
+      html{
+      }
+      body{
+            width: 1290px;
+      }
+      #header_title,#table_div {
+         margin-left: 18px;
+                    width: 740px;
+      }
+
+      #header_title{
+                    {#position: relative;#}
+                    margin-top: 15px;
+                    height: 80px;
+                    background: #F3F4F5;
+                    border-radius: 8px;
+                    padding-top: 1px;
+      }
+
+      #div_title{
+        height: 24px;
+        margin-left: 14px;
+        margin-top: 14px;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 14px;
+/* or 78% */
+        display: flex;
+        align-items: center;
+        color: #000000
+      }
+      h1{
+            font-style: normal;
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 14px;
+      }
+      #event_start{
+                {#position: absolute;#}
+                {#width: 123px;#}
+                height: 16px;
+                 margin-left: 14px;
+                 margin-top: 16px;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 14px;
+                /* or 117% */
+                display: flex;
+                align-items: center;
+                color: #000000;
+      }
+       .date_create_high {
+
+       }
+      .date_create{
+                    margin-left: 18px;
+                    height: 14px;
+                    left: 5px;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 10px;
+                    line-height: 14px;
+                    /* identical to box height, or 140% */
+                    display: flex;
+                    align-items: center;
+                    color: #808080;
+      }
+          #table_div {
+                        margin-left: 18px;
+                        border : 1px solid #C2C9D1;border-radius: 8px;
+      }
+
+        th{
+
+        }
+
+        tr {
+            height: 50px;
+            border-bottom : 1px solid #C2C9D1;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 11px;
+            line-height: 18px;
+            /* identical to box height, or 164% */
+            {#display: flex;#}
+            align-items: center;
+            color: #000000;
+        }
+        td{
+
+            font-style: normal;
+            font-weight: normal;
+            font-size: 11px;
+            line-height: 18px;
+            padding: 5px;
+        }
+        .name_title{
+            width: 60px;
+        }
+        athlete_city athlete_city_text{
+        font-style: normal;
+        font-weight: normal;
+        font-size: 11px;
+        line-height: 14px;
+        align-items: center;
+        color: #000000;
+        }
+        table, tr{
+            border-collapse: collapse;
+                     }
+      table:after{
+            border : 1px solid #C2C9D1;border-radius: 8px;
+        }
+        th{
+           text-align: left;
+        }
+        .athlete_n{
+            width: 30px;
+            text-align: center;
+        }
+        .athlete_city{
+            width: 115px;
+        }
+        .status_title {
+            text-align: center;
+        }
+        .athlete_phone{
+            padding: 0;
+            width: 110px;
+            text-align: center;
+        }
+        .date_birth{
+            width: 80px;
+        }
+  </style>
+</head>
+
+<!--    <div id="header_title">-->
+<!--        <div id="div_title">-->
+<!--            <h1>{{ content.event }}</h1>-->
+<!--        </div>-->
+<!--        <div id="event_start">-->
+<!--            <p>Event start: <b>{{ content.event_start_date }}</b></p>-->
+<!--        </div>-->
+<!--    </div>-->
+    <br>
+<!--    <p class="date_create date_create_high">Дата формування: {{ content.date_create }} </p>-->
+    <div id="table_div">
+    <table>
+        <tr>
+            <th class="athlete_n">№</th>
+            <th class="name_title">First Name</th>
+            <th class="name_title">Last Name</th>
+            <th>Gender</th>
+            <th class="date_birth">Date of birth</th>
+            <th class="athlete_phone">Phone</th>
+            <th class="athlete_city city_title">City</th>
+            <th>Registration date</th>
+            <th class="status_title">Status</th>
+
+        </tr>
+        {% for athlete in content%}
+                <tr  class="tr_table">
+                    <td class="athlete_n">{{ forloop.counter }}.</td>
+                    <td>{{ athlete.first_name }}</td>
+                    <td>{{ athlete.last_name }}</td>
+                    <td>{{ athlete.username }}</td>
+                    <td>{{ athlete.date_birth|date:"d-m-Y" }}</td>
+            {#        <td id="athlete_phone">{{ athlete.phone}}</td>#}
+                    <td class="athlete_phone">{{ athlete.phone}}</td>
+                    <td class="athlete_city athlete_city_text">{{ athlete.pension}}</td>
+                    <td>{{ athlete.date_registered}}</td>
+                    <td>{{ athlete.status}}</td>
+                </tr>
+        {% endfor %}
+    </table>
+    </div>
+ <br>
+     <p class="date_create">Дата формування: {{ content.date_create }} </p>
+</body>
+</html>
