@@ -191,7 +191,7 @@
         {% for athlete in content%}
                 <tr  class="tr_table">
                     <td class="athlete_n">{{ forloop.counter }}.</td>
-                    <td class="name_title">{{ athlete.last_name }} {{ athlete.first_name }} {{ athlete.patronymic }}р</td>
+                    <td class="name_title">{{ athlete.last_name }} {{ athlete.first_name }} {{ athlete.patronymic }}</td>
                     <td class="address" >{{ athlete.street }} <nobr>{{athlete.home}}{%if athlete.home_index%}{{athlete.home_index}}{%endif%}
                         {%if athlete.apartment != 0 %}кв.{{athlete.apartment}}{%endif%}{%if athlete.apartment_index%}{{athlete.apartment_index}}{%endif%}</nobr></td>
                     <td class="date_birth">{{ athlete.date_birth|date:"d-m"}} {{ athlete.date_birth|date:"Y"}}</td>
