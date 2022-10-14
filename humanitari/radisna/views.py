@@ -125,9 +125,9 @@ def register(request):
         username = request.POST["username"]
         password = request.POST["password"]
         email = request.POST["email"]
-        first_name = request.POST["first_name"].replace(" ", "")
-        last_name = request.POST["last_name"].replace(" ", "")
-        patronymic = request.POST["patronymic"].replace(" ", "")
+        first_name = request.POST["first_name"].replace(" ", "").title()
+        last_name = request.POST["last_name"].replace(" ", "").title()
+        patronymic = request.POST["patronymic"].replace(" ", "").title()
         home = request.POST["home"]
         home_index = request.POST["home_index"]
         apartment = request.POST["apartment"]
