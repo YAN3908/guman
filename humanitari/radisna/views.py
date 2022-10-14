@@ -125,9 +125,9 @@ def register(request):
         username = request.POST["username"]
         password = request.POST["password"]
         email = request.POST["email"]
-        first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
-        patronymic = request.POST["patronymic"]
+        first_name = request.POST["first_name"].replace(" ", "")
+        last_name = request.POST["last_name"].replace(" ", "")
+        patronymic = request.POST["patronymic"].replace(" ", "")
         home = request.POST["home"]
         home_index = request.POST["home_index"]
         apartment = request.POST["apartment"]
@@ -135,10 +135,10 @@ def register(request):
             apartment = 0
         apartment_index = request.POST["apartment_index"]
         date_birth = request.POST["date_birth"]
-        invalid = request.POST["invalid"]
-        many_children = request.POST["many_children"]
+        invalid = request.POST["invalid"].replace(" ", "")
+        many_children = request.POST["many_children"].replace(" ", "")
         street = request.POST['street']
-        pension = request.POST['pension']
+        pension = request.POST['pension'].replace(" ", "")
         if len(username) != 10:
             return render(request, "radisna/register.html", {'form': form,
                                                              "message": "Не вірний РОНКПП"})

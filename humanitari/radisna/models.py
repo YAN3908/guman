@@ -47,7 +47,8 @@ class User(AbstractUser):
 
     class Meta:
         unique_together = ('street', 'home', 'home_index', 'apartment', 'apartment_index',)
-
+    def __str__(self):
+        return f"{self.last_name.title()} "
     # def clean(self):
     #     if self.invalid == '':
     #         self.invalid = None
