@@ -34,9 +34,9 @@ class User(AbstractUser):
     apartment = models.PositiveIntegerField(blank=True, null=True, )
     # date_birth = models.DateTimeField()
     phone = models.CharField(max_length=10)
-    invalid = models.CharField(max_length=20, blank=True)
-    pension = models.CharField(max_length=30, blank=True)
-    many_children = models.CharField(max_length=20, blank=True)
+    invalid = models.CharField(max_length=20, unique=True, null=True, blank=True, default=None)
+    pension = models.CharField(max_length=30, unique=True, null=True, blank=True, default=None)
+    many_children = models.CharField(max_length=20, unique=True, null=True, blank=True, default=None)
     street = models.ForeignKey(Streets, on_delete=models.CASCADE, related_name="user_street", null=True, )
     helps = models.ManyToManyField(Helps, blank=True, related_name="helpmy")
     date_birth = models.DateField(null=True, blank=True)
@@ -47,6 +47,15 @@ class User(AbstractUser):
 
     class Meta:
         unique_together = ('street', 'home', 'home_index', 'apartment', 'apartment_index',)
+
+    # def clean(self):
+    #     if self.invalid == '':
+    #         self.invalid = None
+
+    # def save(self, commit=True):
+    #     if self.instance.pension == '':
+    #         self.instance.pension = None
+    #     return super().save(commit)
 
     # def clean(self):
     #     if self.apartment is None:

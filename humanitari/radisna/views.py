@@ -194,6 +194,12 @@ def register(request):
         # print(username)
         # Attempt to create new user
         # print(date_birth)
+        if pension == '':
+            pension = None
+        if invalid == '':
+            invalid = None
+        if many_children == '':
+            many_children = None
 
         try:
             user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name,

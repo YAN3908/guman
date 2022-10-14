@@ -128,12 +128,12 @@
             text-align: center;
         }
         .category{
-            width: 30px;
+            width: 25px;
             border-left: 1px solid #C2C9D1;
             text-align: center;
         }
         .status_title {
-            width: 80px;
+            width: 100px;
             border-left: 1px solid #C2C9D1;
             text-align: center;
         }
@@ -144,7 +144,7 @@
             border-left: 1px solid #C2C9D1;
         }
         .date_birth{
-            width: 45px;
+            width: 36px;
             border-left: 1px solid #C2C9D1;
             text-align: center;
         }
@@ -155,7 +155,7 @@
         }
         .signature{
             border-left: 1px solid #C2C9D1;
-            width: 87px;
+            width: 88px;
             text-align: center;
         }
 
@@ -197,15 +197,19 @@
                     <td class="date_birth">{{ athlete.date_birth|date:"d-m"}} {{ athlete.date_birth|date:"Y"}}</td>
                     <td class="athlete_phone">{{ athlete.phone}}</td>
                     <td class="category">
-                        {% if athlete.invalid %}
-                        инв.
-                        {% elif athlete.many_children%}
-                        Б/д
-                        {%else%}
+
+                        {% if athlete.pension%}
                         60+
                         {%endif%}
+                        {% if athlete.invalid %}
+                        инв.
+                        {%endif%}
+                        {% if athlete.many_children%}
+                        Б/д
+                        {%endif%}
+
                     </td>
-                    <td class="status_title">{{ athlete.username}} {{ athlete.pension}} {{ athlete.many_children}}</td>
+                    <td class="status_title">{{ athlete.username}} {% if athlete.pension%}{{ athlete.pension}}{%endif%} {% if athlete.invalid %}{{ athlete.invalid}}{%endif%} {% if athlete.many_children%}{{ athlete.many_children}}ДД{%endif%}</td>
                     <td class="signature"></td>
                 </tr>
         {% endfor %}
