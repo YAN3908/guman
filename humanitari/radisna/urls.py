@@ -12,4 +12,5 @@ urlpatterns = [
                   path("helpme", views.helpme, name="helpme"),
                   path("check", views.check, name="check"),
                   path("pdf", views.pdf, name="pdf"),
+                  path("update_user", views.update_user, name="update_user"),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

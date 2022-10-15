@@ -2,7 +2,6 @@
 import io
 from datetime import datetime, timedelta
 
-
 from django import forms
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ValidationError
@@ -54,6 +53,7 @@ def pdf(request):
 
 class DateInput(forms.DateInput):
     input_type = 'date'
+    input_formats = ('%Y-%m-%d')
 
 
 class NumberInput(forms.NumberInput):
@@ -73,7 +73,7 @@ class RForm(forms.ModelForm):
         widgets = {
             'date_birth': DateInput(
                 attrs={'class': 'form-control', 'required': 'true', 'max': datelimit.strftime("%Y-%m-%d")}),
-            # 'date_birth': DateInput(attrs={'class': 'form-control', 'required': 'true', 'max': '1979-12-31'}),
+            # 'date_birth': DateInput(attrs={'class': 'form-control', 'required': 'true',}),
             'username': NumberInput(attrs={'class': 'form-control'}),
             'password': NumberInput(attrs={'class': 'form-control', 'min_length': 10}),
             'first_name': TextInput(attrs={'class': 'form-control', 'required': 'true'}),
@@ -94,7 +94,7 @@ class RForm(forms.ModelForm):
         # }
         labels = {
             'username': ('РНОКПП'),
-            'password': ('№ телефону'),
+            'password': ('№ телефону: oxxxxxxxxx'),
             'invalid': ('Сер.№ посв. інваліда'),
             'many_children': ('Сер.№ посв. багатодітної особи'),
             'patronymic': ('По-батькові'),
@@ -115,6 +115,128 @@ class RForm(forms.ModelForm):
         #         if apartment > 30:
         #             # count_text = len(title)
         #             raise ValidationError("Title is too short")
+
+
+def update_user(request):
+    pk = int(request.user.id)
+    instance = User.objects.filter(pk=pk).first()
+    print(instance.password)
+    # dat=instance.date_birth.strftime("%d.%m.%Y")
+    form = RForm(instance=instance,
+                 initial={'password': instance.phone, 'date_birth': instance.date_birth.strftime("%Y-%m-%d")})
+    # form = RForm(initial = {'date_birth': dat})
+    if request.method == "POST":
+        # form = RForm(request.POST)
+        username = request.POST["username"]
+        password = request.POST["password"]
+        email = request.POST["email"]
+        first_name = request.POST["first_name"].replace(" ", "").title()
+        last_name = request.POST["last_name"].replace(" ", "").title()
+        patronymic = request.POST["patronymic"].replace(" ", "").title()
+        home = request.POST["home"]
+        home_index = request.POST["home_index"]
+        apartment = request.POST["apartment"]
+        if apartment == '':
+            apartment = 0
+        apartment_index = request.POST["apartment_index"]
+        date_birth = request.POST["date_birth"]
+        invalid = request.POST["invalid"].replace(" ", "")
+        many_children = request.POST["many_children"].replace(" ", "")
+        street = request.POST['street']
+        pension = request.POST['pension'].replace(" ", "")
+        if len(username) != 10:
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "Не вірний РОНКПП"})
+        if all([password[:3] != "039",
+                password[:3] != "051",
+                password[:3] != "050",
+                password[:3] != "063",
+                password[:3] != "066",
+                password[:3] != "067",
+                password[:3] != "068",
+                password[:3] != "073",
+                password[:3] != "091",
+                password[:3] != "092",
+                password[:3] != "093",
+                password[:3] != "094",
+                password[:3] != "095",
+                password[:3] != "096",
+                password[:3] != "097",
+                password[:3] != "098",
+                password[:3] != "099",
+                ]):
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "Не вірний номер телефону"
+                                                                })
+        if len(password) != 10:
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "Не вірний номер телефону"
+                                                                })
+        if not first_name.isalpha():
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "У вашому імені не повино бути цифр"
+                                                                })
+        if not last_name.isalpha():
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "У вашому прізвищі не повино бути цифр"
+                                                                })
+        if not patronymic.isalpha():
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "По-батькові не може містити цифр"
+                                                                })
+        if not invalid and not many_children and not pension:
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "Ви повині ввести хочаб один льготний документ"
+                                                                })
+
+        datelimit = datetime.now() - timedelta(days=21914)
+        if not invalid and not many_children:
+            if date_birth > datelimit.strftime("%Y-%m-%d"):
+                return render(request, "radisna/update_user.html", {'form': form,
+                                                                    "message": "Ваш вік повинен бути не меньшим за 60 років"
+                                                                    })
+        # print(username)
+        # Attempt to create new user
+        # print(date_birth)
+        if pension == '':
+            pension = None
+        if invalid == '':
+            invalid = None
+        if many_children == '':
+            many_children = None
+
+        try:
+            # user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name,
+            #                                 home=home, home_index=home_index,
+            #                                 apartment=apartment, apartment_index=apartment_index, date_birth=date_birth,
+            #                                 patronymic=patronymic,
+            #                                 phone=password, pension=pension, invalid=invalid,
+            #                                 many_children=many_children,
+            #                                 street=Streets.objects.get(pk=street), )
+
+            User.objects.filter(pk=pk).update(username=username, email=email, first_name=first_name,
+                                              last_name=last_name,
+                                              home=home, home_index=home_index,
+                                              apartment=apartment, apartment_index=apartment_index,
+                                              date_birth=date_birth,
+                                              patronymic=patronymic,
+                                              phone=password, pension=pension, invalid=invalid,
+                                              many_children=many_children,
+                                              street=Streets.objects.get(pk=street), )
+            user = User.objects.filter(pk=pk).first()
+            user.set_password(password)
+            user.save()
+        except IntegrityError:
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "Ви або хтось з вашої родини вже зареєстрований"
+
+                                                                })
+        login(request, user)
+        # return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("helpme"))
+
+    else:
+        return render(request, "radisna/update_user.html", {'form': form})
 
 
 def register(request):
@@ -259,7 +381,7 @@ def index(request):
             if request.POST["I_gree"]:
                 return HttpResponseRedirect(reverse("register"))
         else:
-            return render(request, "radisna/index.html")
+            return render(request, "radisna/index.html", {'streets': Streets.objects.all()})
         # return HttpResponseRedirect(reverse("register"))
 
 
@@ -292,7 +414,7 @@ def helpme(request):
                 if user.helps.all().last().Check == True:
                     return render(request, "radisna/helpme.html",
                                   {"message1": f"Ви зареєстровані як {user.first_name} "
-                                               f"{user.patronymic}, ми вже готуємо вашу допомогу, чекайте будь ласка."})
+                                               f"{user.patronymic}, Ваш запит на гуманітарну допомогу прийнято, чекайте будь ласка."})
                 else:
                     return render(request, "radisna/helpme.html",
                                   {"message": f"Ви зареєстровані як {user.first_name} "

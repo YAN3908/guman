@@ -1,0 +1,101 @@
+{% extends "radisna/layout.html" %}
+{% load static %}
+{% block body %}
+<main>
+        {% if message %}
+            <div STYLE="color: red">{{ message }}</div>
+        {%else%}
+            <p> Уважно перевірте всі введені дані, якщо ви бачите помилку, змініть це поле і натисніть
+    "оновити". Якщо все файно натисніть "все файно"
+            </p>
+        {% endif %}
+    <div class="container" style="max-width: 800px;">
+<!--        <h2>Greate a lot</h2>-->
+        <form action="{% url 'update_user' %}" method="post" >
+        {% csrf_token %}
+            {{form.username.label_tag}}<span style="color:red;">*</span>
+            <div class="form-group">{{form.username}}</div>
+
+        {{form.password.label_tag}}<span style="color:red;">*</span>
+            <div class="form-group">{{form.password}}</div>
+
+        {{form.last_name.label_tag}}<span style="color:red;">*</span>
+            <div class="form-group">{{form.last_name}}</div>
+
+        {{form.first_name.label_tag}}<span style="color:red;">*</span>
+            <div class="form-group">{{form.first_name}}</div>
+
+         {{form.patronymic.label_tag}}<span style="color:red;">*</span>
+            <div class="form-group">{{form.patronymic}}</div>
+
+         {{form.street.label_tag}}<span style="color:red;">*</span>
+            <div class="form-group">{{form.street}}</div>
+<!--            {{form.home.label_tag}}<span style="color:red;">*</span>-->
+
+            <label class="form-label"> Дом:</label><span style="color:red;"> *</span>
+<div class="row">
+
+            <div class="col">
+                {{form.home}}
+            </div>
+            <div class="col-auto" style="padding-top: 5px">
+                <label class="form-label">/</label>
+            </div>
+            <div class="col-auto" >
+                {{form.home_index}}
+            </div>
+</div>
+
+<label class="form-label"style="margin-top: 9px"> Квартира:</label>
+<div class="row">
+
+            <div class="col">
+                {{form.apartment}}
+            </div>
+            <div class="col-auto" style="padding-top: 5px">
+                <label class="form-label">/</label>
+            </div>
+            <div class="col-auto" style="padding-bottom: 12px">
+                {{form.apartment_index}}
+            </div>
+</div>
+
+         {{form.date_birth.label_tag}}<span style="color:red;">*</span>
+            <div class="form-group">{{form.date_birth}}</div>
+
+         {{form.pension.label_tag}}
+            <div class="form-group">{{form.pension}}</div>
+
+         {{form.invalid.label_tag}}
+            <div class="form-group">{{form.invalid}}</div>
+
+         {{form.many_children.label_tag}}
+            <div class="form-group">{{form.many_children}}</div>
+
+          {{form.email.label_tag}}
+            <div class="form-group">{{form.email}}</div>
+
+<!--        {% for field in form  %}-->
+
+<!--            {%if field.name == "email" or  field.name == "invalid" or  field.name == "many_children" %}-->
+<!--           {{field.label_tag}}-->
+<!--            {%else%}-->
+<!--            {{field.label_tag}}<span style="color:red;">*</span>-->
+<!--            {%endif%}-->
+<!--            {%if field.name == "home"%}-->
+<!--            <div class="row">-->
+<!--                <div class="col">{{field}}</div>-->
+<!--                -->
+<!--            {%else%}-->
+<!--            <div class="form-group">{{field}}</div>-->
+<!--            {%endif%}-->
+
+<!--           {% endfor %}-->
+
+        <input class="btn btn-primary" type="submit" value="Оновити">
+            <a  href="{% url 'index' %}"><button type="button" class="btn btn-primary">Усе файно</button></a>
+        </form>
+
+    </div>
+</main>
+{% endblock %}
