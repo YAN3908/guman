@@ -2,14 +2,16 @@
 {% load static %}
 {% block body %}
 <main>
-        {% if message %}
+
+    <div class="container" style="max-width: 800px;">
+
+                {% if message %}
             <div STYLE="color: red">{{ message }}</div>
         {%else%}
             <p> Уважно перевірте всі введені дані, якщо ви бачите помилку, змініть це поле і натисніть
     "оновити". Якщо все файно натисніть "Усе файно"
             </p>
         {% endif %}
-    <div class="container" style="max-width: 800px;">
 <!--        <h2>Greate a lot</h2>-->
         <form action="{% url 'update_user' %}" method="post" >
         {% csrf_token %}

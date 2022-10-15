@@ -339,7 +339,7 @@ def register(request):
                                                              })
         login(request, user)
         # return HttpResponseRedirect(reverse("index"))
-        return HttpResponseRedirect(reverse("helpme"))
+        return HttpResponseRedirect(reverse("update_user"))
 
     else:
         return render(request, "radisna/register.html", {'form': RForm})
