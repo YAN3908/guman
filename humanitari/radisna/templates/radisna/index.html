@@ -8,7 +8,7 @@
 
 <a  href="{% url 'login' %}"><button type="button" class="btn btn-primary">Вже реєструвалися, авторізуйтесь</button></a>
         <p>Це сторінка реєстраціі на отримання допомоги від "World Central Kitchen" тут можуть зареєструватися громодяни
-            прописані по вулиці {%for street in streets%} {{street.street}}, {%endfor%}. Зареєструватися можна лише
+            прописані по вулиці {%for street in streets%} {%if forloop.last%}{{street.street}}{%else%}{{street.street}},{%endif%}{%endfor%}. Зареєструватися можна лише
             пенсіонерам за віком, інвалідам 1-2 групи чи багатодітним особам. Допомога надєтся тільки за пропискою.
             Вона не надаєтсся переселеним особам, а також, як що хтось прописаний разом з вами вже отримує допомогу
             від "World Central Kitchen".
