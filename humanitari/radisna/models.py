@@ -44,7 +44,7 @@ class User(AbstractUser):
                                   choices=[('а', "а"), ('б', "б"), ('в', "в"), ('г', "г")])
     apartment_index = models.CharField(max_length=1, blank=True, null=True,
                                        choices=[('а', "а"), ('б', "б"), ('в', "в"), ('г', "г")])
-    gender = models.IntegerField(choices=[(1, "чол"), (0, "жін")])
+    gender = models.IntegerField(null=True, choices=[(1, "чол"), (0, "жін")])
 
 
     class Meta:
