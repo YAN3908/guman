@@ -148,13 +148,12 @@ def update_user(request):
         pension = request.POST['pension'].replace(" ", "")
         gender = request.POST['gender']
 
-        if int(username[8]) % 2 != int(gender):
-            return render(request, "radisna/update_user.html", {'form': form,
-                                                             "message": "РНОКПП не відповідае введенним даним. Будь ласка вводьте правдиву інформацію"})
-
         if len(username) != 10:
             return render(request, "radisna/update_user.html", {'form': form,
                                                              "message": "Не вірний РНОКПП"})
+        if int(username[8]) % 2 != int(gender):
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                             "message": "РНОКПП не відповідае введенним даним. Будь ласка вводьте правдиву інформацію"})
 
         x = (int(username[0]) * (-1) + int(username[1]) * 5 + int(username[2]) * 7 + int(username[3]) * 9 + int(
             username[4]) * 4 + int(username[5]) * 6 + int(username[6]) * 10 + int(username[7]) * 5 + int(
@@ -302,14 +301,15 @@ def register(request):
         pension = request.POST['pension'].replace(" ", "")
         gender = request.POST['gender']
 
+        if len(username) != 10:
+            return render(request, "radisna/register.html", {'form': form,
+                                                             "message": "Не вірний РНОКПП"})
 
         if int(username[8]) % 2 != int(gender):
             return render(request, "radisna/register.html", {'form': form,
                                                              "message": "РНОКПП не відповідае введенним даним. Будь ласка вводьте правдиву інформацію"})
 
-        if len(username) != 10:
-            return render(request, "radisna/register.html", {'form': form,
-                                                             "message": "Не вірний РНОКПП"})
+
 
         x = (int(username[0]) * (-1) + int(username[1]) * 5 + int(username[2]) * 7 + int(username[3]) * 9 + int(
             username[4]) * 4 + int(username[5]) * 6 + int(username[6]) * 10 + int(username[7]) * 5 + int(
