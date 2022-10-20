@@ -56,9 +56,21 @@
             </div>
 </div>
 
-         {{form.date_birth.label_tag}}<span style="color:red;">*</span>
-              натисніть рік в в горі випадаючого віконця
-            <div class="form-group">{{form.date_birth}}</div>
+<div class="row" style="margin-top: 9px">
+           <div class="col">
+                {{form.date_birth.label_tag}}<span style="color:red;">*</span>
+                 натисніть рік в в горі випадаючого віконця
+                 <div class="form-group">{{form.date_birth}}</div>
+           </div>
+
+            <div class="col-auto" style="display: flex; align-items: flex-end;">
+                <div>
+                    {{form.gender.label_tag}}
+                    <div class="form-group">{{form.gender}}</div>
+                </div>
+           </div>
+</div>
+
 
          {{form.pension.label_tag}}
             <div class="form-group">{{form.pension}}</div>

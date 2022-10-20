@@ -1,15 +1,16 @@
 {% load static %}
 
 body {
-    /*background-image: url('image/hammer.png');*/
+    background-image: url('image/fon.jpg');
     text-align: center;
 
 }
 
 
 header{
-     background: url('image/auctionn.jpg') no-repeat center;
+     background: url('image/fon.jpg') no-repeat center;
      background-size: cover;
+     text-align: center;
 }
 div.tab{
     display: inline;
@@ -50,24 +51,7 @@ div.sticky {
     padding-left:25px;"
 }
 
-.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
- }
 
-#card_div{
-overflow: hidden;
-}
-#card_div:hover img {
-  transition: 0.7s;
-  transform: scale(1.1);
-
-}
-#card_div:hover #sold {
-    transition: 0.1s;
-    visibility: hidden;
-
-}
 
 @media (min-width: 374px) {
 #hammer_sm {

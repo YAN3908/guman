@@ -29,9 +29,9 @@ class Helps(models.Model):
 
 class User(AbstractUser):
     # userLot = models.ForeignKey(Lot, on_delete=models.CASCADE, related_name="userLot")
-    home = models.PositiveIntegerField(null=True, )
+    home = models.PositiveIntegerField(null=True,)
     patronymic = models.CharField(max_length=24)
-    apartment = models.PositiveIntegerField(blank=True, null=True, )
+    apartment = models.PositiveIntegerField(blank=True, null=True,)
     # date_birth = models.DateTimeField()
     phone = models.CharField(max_length=10)
     invalid = models.CharField(max_length=20, unique=True, null=True, blank=True, default=None)
@@ -44,11 +44,13 @@ class User(AbstractUser):
                                   choices=[('а', "а"), ('б', "б"), ('в', "в"), ('г', "г")])
     apartment_index = models.CharField(max_length=1, blank=True, null=True,
                                        choices=[('а', "а"), ('б', "б"), ('в', "в"), ('г', "г")])
+    gender = models.IntegerField(choices=[(1, "чол"), (0, "жін")])
+
 
     class Meta:
         unique_together = ('street', 'home', 'home_index', 'apartment', 'apartment_index',)
-    def __str__(self):
-        return f"{self.last_name} "
+    # def __str__(self):
+    #     return f"{self.last_name} "
     # def clean(self):
     #     if self.invalid == '':
     #         self.invalid = None

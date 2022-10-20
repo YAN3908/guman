@@ -62,8 +62,20 @@
             </div>
 </div>
 
-         {{form.date_birth.label_tag}}<span style="color:red;">*</span>
-            <div class="form-group">{{form.date_birth}}</div>
+<div class="row" style="margin-top: 9px">
+           <div class="col">
+                {{form.date_birth.label_tag}}<span style="color:red;">*</span>
+                 натисніть рік в в горі випадаючого віконця
+                 <div class="form-group">{{form.date_birth}}</div>
+           </div>
+
+            <div class="col-auto" style="display: flex; align-items: flex-end;">
+                <div>
+                    {{form.gender.label_tag}}
+                    <div class="form-group">{{form.gender}}</div>
+                </div>
+           </div>
+</div>
 
          {{form.pension.label_tag}}
             <div class="form-group">{{form.pension}}</div>
@@ -76,23 +88,6 @@
 
           {{form.email.label_tag}}
             <div class="form-group">{{form.email}}</div>
-
-<!--        {% for field in form  %}-->
-
-<!--            {%if field.name == "email" or  field.name == "invalid" or  field.name == "many_children" %}-->
-<!--           {{field.label_tag}}-->
-<!--            {%else%}-->
-<!--            {{field.label_tag}}<span style="color:red;">*</span>-->
-<!--            {%endif%}-->
-<!--            {%if field.name == "home"%}-->
-<!--            <div class="row">-->
-<!--                <div class="col">{{field}}</div>-->
-<!--                -->
-<!--            {%else%}-->
-<!--            <div class="form-group">{{field}}</div>-->
-<!--            {%endif%}-->
-
-<!--           {% endfor %}-->
 
         <input class="btn btn-primary" type="submit" value="Оновити">
             <a  href="{% url 'index' %}"><button type="button" class="btn btn-primary">Усе файно</button></a>

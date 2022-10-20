@@ -8,8 +8,9 @@ body {
 
 
 header{
-     background: url('image/auctionn.jpg') no-repeat center;
+     background: url('https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-boutique-health-fashion-simple-health-care-products-health-full-screen-poster-image_188706.jpg') no-repeat center;
      background-size: cover;
+     text-align: center;
 }
 div.tab{
     display: inline;
@@ -50,24 +51,7 @@ div.sticky {
     padding-left:25px;"
 }
 
-.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
- }
 
-#card_div{
-overflow: hidden;
-}
-#card_div:hover img {
-  transition: 0.7s;
-  transform: scale(1.1);
-
-}
-#card_div:hover #sold {
-    transition: 0.1s;
-    visibility: hidden;
-
-}
 
 @media (min-width: 374px) {
 #hammer_sm {

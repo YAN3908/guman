@@ -14,11 +14,27 @@
         <link rel="icon" type="image/png" href="{% static 'radisna/css/image/bread.ico' %}">
     </head>
     <header>
-<!--        <h1>Auctions</h1>-->
+
+        <h2 style="text-stroke: 4px navy;">Гуманітарна допомога</h2>
+        {% if user.is_authenticated %}
+        <ul class="nav nav-pills">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="{% url 'index' %}" role="button" aria-expanded="false">Вийти с профілю</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item">Hі я не хочу виходити с профілю</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}" >Так я бажаю вийти</a></li>
+            </ul>
+          </li>
+            </ul>
+            {%endif%}
 
 
 
     </header>
+
+
+
         {% block body %}
         {% endblock %}
 

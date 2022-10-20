@@ -67,7 +67,7 @@ class RForm(forms.ModelForm):
         fields = (
             'username', 'password', 'last_name', 'first_name', 'patronymic', 'street', 'home', 'home_index',
             'apartment', 'apartment_index',
-            'date_birth', 'pension',
+            'date_birth', 'gender', 'pension',
             'invalid', 'many_children', 'email')
         datelimit = datetime.now() - timedelta(days=5111)
         widgets = {
@@ -87,7 +87,8 @@ class RForm(forms.ModelForm):
             'many_children': TextInput(attrs={'class': 'form-control'}),
             'email': EmailInput(attrs={'class': 'form-control'}),
             'home_index': Select(attrs={'class': 'form-control'}),
-            'apartment_index': Select(attrs={'class': 'form-control'})
+            'apartment_index': Select(attrs={'class': 'form-control'}),
+            'gender': Select(attrs={'class': 'form-control'}),
         }
         # widgets = {
         #     'password': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -102,7 +103,8 @@ class RForm(forms.ModelForm):
             'apartment': ('Квартира'),
             'date_birth': ('Дата народження'),
             'street': ('Вулиця'),
-            'pension': ('Сер.№ пенсійного')
+            'pension': ('Сер.№ пенсійного'),
+            'gender': ('стать')
         }
         # unique_together = ('street', 'home', 'home_index', 'apartment_index')
 
@@ -120,7 +122,7 @@ class RForm(forms.ModelForm):
 def update_user(request):
     pk = int(request.user.id)
     instance = User.objects.filter(pk=pk).first()
-    print(instance.password)
+    # print(instance.password)
     # dat=instance.date_birth.strftime("%d.%m.%Y")
     form = RForm(instance=instance,
                  initial={'password': instance.phone, 'date_birth': instance.date_birth.strftime("%Y-%m-%d")})
@@ -144,9 +146,25 @@ def update_user(request):
         many_children = request.POST["many_children"].replace(" ", "")
         street = request.POST['street']
         pension = request.POST['pension'].replace(" ", "")
+        gender = request.POST['gender']
+
+        if int(username[8]) % 2 != int(gender):
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                             "message": "РНОКПП не відповідае введенним даним. Будь ласка вводьте правдиву інформацію"})
+
         if len(username) != 10:
             return render(request, "radisna/update_user.html", {'form': form,
-                                                                "message": "Не вірний РОНКПП"})
+                                                             "message": "Не вірний РНОКПП"})
+
+        x = (int(username[0]) * (-1) + int(username[1]) * 5 + int(username[2]) * 7 + int(username[3]) * 9 + int(
+            username[4]) * 4 + int(username[5]) * 6 + int(username[6]) * 10 + int(username[7]) * 5 + int(
+            username[8]) * 7) % 11 % 10
+
+        if x != int(username[9]):
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "Не вірний РНОКПП"})
+
+
         if all([password[:3] != "039",
                 password[:3] != "051",
                 password[:3] != "050",
@@ -195,6 +213,27 @@ def update_user(request):
                 return render(request, "radisna/update_user.html", {'form': form,
                                                                     "message": "Ваш вік повинен бути не меньшим за 60 років"
                                                                     })
+
+        # print(datetime.fromisoformat(date_birth))
+        # days = username[:5]
+        # days = int(days)
+        # print(type(datetime(2017, 2, 26)))
+        # print(date_birth)
+        # print(type(date_birth))
+        #
+        # print(datetime(2017, 2, 26))
+        # print(type(timedelta(days=days)))
+        print(datetime.fromisoformat(date_birth) - timedelta(days=int(username[:5])))
+        # print(datetime(1899, 12, 31))
+        if datetime.fromisoformat(date_birth) - timedelta(days=int(username[:5])) == datetime(1899, 12, 31):
+            print("true data")
+        else:
+            print("false data")
+        # print(int(username[0]))
+
+        # print(x)
+        # print(username[9])
+
         # print(username)
         # Attempt to create new user
         # print(date_birth)
@@ -218,7 +257,7 @@ def update_user(request):
                                               last_name=last_name,
                                               home=home, home_index=home_index,
                                               apartment=apartment, apartment_index=apartment_index,
-                                              date_birth=date_birth,
+                                              gender=gender, date_birth=date_birth,
                                               patronymic=patronymic,
                                               phone=password, pension=pension, invalid=invalid,
                                               many_children=many_children,
@@ -261,9 +300,25 @@ def register(request):
         many_children = request.POST["many_children"].replace(" ", "")
         street = request.POST['street']
         pension = request.POST['pension'].replace(" ", "")
+        gender = request.POST['gender']
+
+
+        if int(username[8]) % 2 != int(gender):
+            return render(request, "radisna/register.html", {'form': form,
+                                                             "message": "РНОКПП не відповідае введенним даним. Будь ласка вводьте правдиву інформацію"})
+
         if len(username) != 10:
             return render(request, "radisna/register.html", {'form': form,
-                                                             "message": "Не вірний РОНКПП"})
+                                                             "message": "Не вірний РНОКПП"})
+
+        x = (int(username[0]) * (-1) + int(username[1]) * 5 + int(username[2]) * 7 + int(username[3]) * 9 + int(
+            username[4]) * 4 + int(username[5]) * 6 + int(username[6]) * 10 + int(username[7]) * 5 + int(
+            username[8]) * 7) % 11 % 10
+
+        if x != int(username[9]):
+            return render(request, "radisna/register.html", {'form': form,
+                                                                "message": "Не вірний РНОКПП"})
+
         if all([password[:3] != "039",
                 password[:3] != "051",
                 password[:3] != "050",
@@ -327,7 +382,7 @@ def register(request):
             user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name,
                                             home=home, home_index=home_index,
                                             apartment=apartment, apartment_index=apartment_index, date_birth=date_birth,
-                                            patronymic=patronymic,
+                                            gender=gender, patronymic=patronymic,
                                             phone=password, pension=pension, invalid=invalid,
                                             many_children=many_children,
                                             street=Streets.objects.get(pk=street), )
@@ -393,8 +448,6 @@ def logout_view(request):
 def helpme(request):
     if request.user.is_authenticated:
         user = User.objects.get(pk=int(request.user.id))
-        print(user)
-        print("qwertyuiop")
         if request.method == "POST":
             if request.POST['helpme']:
                 help = Helps(Check=True)
@@ -407,7 +460,7 @@ def helpme(request):
                 return render(request, "radisna/helpme.html")
 
         else:
-            print(request.user.id)
+            # print(request.user.id)
             # user = User.objects.get(pk=int(request.user.id))
             # print(user.helps.all().last().Check)
             if user.helps.all():
