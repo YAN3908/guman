@@ -163,7 +163,10 @@ def update_user(request):
             return render(request, "radisna/update_user.html", {'form': form,
                                                                 "message": "Не вірний РНОКПП"})
 
-
+        if len(password) != 10:
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "Не вірний номер телефону"
+                                                                })
         if all([password[:3] != "039",
                 password[:3] != "051",
                 password[:3] != "050",
@@ -185,10 +188,7 @@ def update_user(request):
             return render(request, "radisna/update_user.html", {'form': form,
                                                                 "message": "Не вірний номер телефону"
                                                                 })
-        if len(password) != 10:
-            return render(request, "radisna/update_user.html", {'form': form,
-                                                                "message": "Не вірний номер телефону"
-                                                                })
+
         if not first_name.isalpha():
             return render(request, "radisna/update_user.html", {'form': form,
                                                                 "message": "У вашому імені не повино бути цифр"
@@ -318,7 +318,10 @@ def register(request):
         if x != int(username[9]):
             return render(request, "radisna/register.html", {'form': form,
                                                                 "message": "Не вірний РНОКПП"})
-
+        if len(password) != 10:
+            return render(request, "radisna/register.html", {'form': form,
+                                                             "message": "Не вірний номер телефону"
+                                                             })
         if all([password[:3] != "039",
                 password[:3] != "051",
                 password[:3] != "050",
@@ -337,10 +340,6 @@ def register(request):
                 password[:3] != "098",
                 password[:3] != "099",
                 ]):
-            return render(request, "radisna/register.html", {'form': form,
-                                                             "message": "Не вірний номер телефону"
-                                                             })
-        if len(password) != 10:
             return render(request, "radisna/register.html", {'form': form,
                                                              "message": "Не вірний номер телефону"
                                                              })
