@@ -1,14 +1,14 @@
 {% load static %}
 
 body {
-    /*background-image: url('image/hammer.png');*/
+    background-image: url('image/fon.jpg');
     text-align: center;
 
 }
 
 
 header{
-     background: url('https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-boutique-health-fashion-simple-health-care-products-health-full-screen-poster-image_188706.jpg') no-repeat center;
+     background: url('image/fon.jpg') no-repeat center;
      background-size: cover;
      text-align: center;
 }
