@@ -76,12 +76,12 @@ class RForm(forms.ModelForm):
             # 'date_birth': DateInput(attrs={'class': 'form-control', 'required': 'true',}),
             'username': NumberInput(attrs={'class': 'form-control'}),
             'password': NumberInput(attrs={'class': 'form-control', 'min_length': 10}),
-            'first_name': TextInput(attrs={'class': 'form-control', 'required': 'true'}),
+            'first_name': TextInput(attrs={'class': 'form-control', 'required': 'true', 'pattern': "[А-Яа-яЁёїЇІіҐґЄє' ]+"}),
             'last_name': TextInput(attrs={'class': 'form-control', 'required': 'true'}),
             'patronymic': TextInput(attrs={'class': 'form-control'}),
             'street': Select(attrs={'class': 'form-control'}),
-            'home': NumberInput(attrs={'class': 'form-control'}),
-            'apartment': NumberInput(attrs={'class': 'form-control'}),
+            'home': NumberInput(attrs={'class': 'form-control', 'min': 1}),
+            'apartment': NumberInput(attrs={'class': 'form-control', 'min': 1}),
             'invalid': TextInput(attrs={'class': 'form-control'}),
             'pension': TextInput(attrs={'class': 'form-control'}),
             'many_children': TextInput(attrs={'class': 'form-control'}),
@@ -122,6 +122,8 @@ class RForm(forms.ModelForm):
 def update_user(request):
     pk = int(request.user.id)
     instance = User.objects.filter(pk=pk).first()
+    if instance.apartment == 0:
+        instance.apartment=None
     # print(instance.password)
     # dat=instance.date_birth.strftime("%d.%m.%Y")
     form = RForm(instance=instance,
@@ -166,6 +168,11 @@ def update_user(request):
         if len(password) != 10:
             return render(request, "radisna/update_user.html", {'form': form,
                                                                 "message": "Не вірний номер телефону"
+                                                                })
+
+        if apartment == 0 and apartment_index !='':
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "ви не можете вказати индекс квартири без номеру квартири"
                                                                 })
         if all([password[:3] != "039",
                 password[:3] != "051",
@@ -322,6 +329,10 @@ def register(request):
             return render(request, "radisna/register.html", {'form': form,
                                                              "message": "Не вірний номер телефону"
                                                              })
+        if apartment == 0 and apartment_index !='':
+            return render(request, "radisna/update_user.html", {'form': form,
+                                                                "message": "ви не можете вказати индекс квартири без номеру квартири"
+                                                                })
         if all([password[:3] != "039",
                 password[:3] != "051",
                 password[:3] != "050",
