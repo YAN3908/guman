@@ -231,10 +231,7 @@ def update_user(request):
         # print(type(timedelta(days=days)))
         print(datetime.fromisoformat(date_birth) - timedelta(days=int(username[:5])))
         # print(datetime(1899, 12, 31))
-        if datetime.fromisoformat(date_birth) - timedelta(days=int(username[:5])) == datetime(1899, 12, 31):
-            print("true data")
-        else:
-            print("false data")
+
         # print(int(username[0]))
 
         # print(x)
@@ -281,8 +278,12 @@ def update_user(request):
         return HttpResponseRedirect(reverse("helpme"))
 
     else:
-        return render(request, "radisna/update_user.html", {'form': form})
-
+        if 'message' in request.session:
+            message = request.session['message']
+            del request.session['message']
+            return render(request, "radisna/update_user.html", {'form': form, "message": message})
+        else:
+            return render(request, "radisna/update_user.html", {'form': form})
 
 def register(request):
     # return HttpResponse(request.user)
@@ -404,6 +405,8 @@ def register(request):
                                                              })
         login(request, user)
         # return HttpResponseRedirect(reverse("index"))
+        if datetime.fromisoformat(date_birth) - timedelta(days=int(username[:5])) != datetime(1899, 12, 31):
+            request.session["message"] = 'Зверніть увагу на дату народження ви впевнені що вона правильна? Якщо так натисніть "Все файно"'
         return HttpResponseRedirect(reverse("update_user"))
 
     else:
